@@ -1,4 +1,4 @@
-package nlp.lm;
+package lm;
 
 /**
  * A simple wrapper data structure for storing a double 

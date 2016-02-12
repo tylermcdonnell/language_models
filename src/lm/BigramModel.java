@@ -1,4 +1,4 @@
-package nlp.lm;
+package lm;
 
 import java.io.*;
 import java.util.*;
@@ -271,11 +271,11 @@ public class BigramModel {
 
     /** Returns vector of probabilities of predicting each token in the sentence
      *  including the end of sentence */
-    public double[] sentenceTokenProbs (List<String> sentence) {
+    public Double[] sentenceTokenProbs (List<String> sentence) {
 	// Set start-sentence as initial token
 	String prevToken = "<S>";
 	// Vector for storing token prediction probs
-	double[] tokenProbs = new double[sentence.size() + 1];
+	Double[] tokenProbs = new Double[sentence.size() + 1];
 	// Token counter
 	int i = 0;
 	// Compute prob of predicting each token in sentence
@@ -349,6 +349,7 @@ public class BigramModel {
 			   ") \n# Test Sentences = " + testSentences.size() +
 			   " (# words = " + wordCount(testSentences) + ")");
 	// Create a bigram model and train it.
+	System.out.println("----- Bigram Model ----- ");
 	BigramModel model = new BigramModel();
 	System.out.println("Training...");
 	model.train(trainSentences);
@@ -356,9 +357,41 @@ public class BigramModel {
 	model.test(trainSentences);
 	model.test2(trainSentences);
 	System.out.println("Testing...");
-	// Test on test data using test and test2
+    // Test on test data using test and test2
 	model.test(testSentences);
 	model.test2(testSentences);
+	
+	System.out.println("----- Backward Bigram Model ----- ");
+	BigramModel model2 = new BackwardBigramModel();
+	System.out.println("Training...");
+	model2.train(trainSentences);
+	// Test on training data using test and test2
+	model2.test(trainSentences);
+	model2.test2(trainSentences);
+	System.out.println("Testing...");
+	// Test on test data using test and test2
+	model2.test(testSentences);
+	model2.test2(testSentences);
+
+//	List<String> testSentence = new ArrayList<String>();
+//	testSentence.add("This");
+//	testSentence.add("is");
+//	testSentence.add("a");
+//	testSentence.add("test");
+//	testSentences = new ArrayList<List<String>>();
+//	testSentences.add(testSentence);
+
+	System.out.println("----- Bidirectional Bigram Model ----- ");
+	BigramModel model3 = new BidirectionalBigramModel();
+	System.out.println("Training...");
+	model3.train(trainSentences);
+	// Test on training data using test and test2
+	model3.test(trainSentences);
+	model3.test2(trainSentences);
+	System.out.println("Testing...");
+	// Test on test data using test and test2
+	model3.test(testSentences);
+	model3.test2(testSentences);
     }
 
 }
