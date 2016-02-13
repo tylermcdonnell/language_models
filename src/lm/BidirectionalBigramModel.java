@@ -1,15 +1,13 @@
 package lm;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 /** 
  * @author TSM
- * A simple backward bigram language model that combines a standard
- * and backward bigram model for prediction. Linearly interpolates
- * probabilities of words using both forward and backward estimates.
+ * A simple bidirectional bigram language model that linearly interpolates
+ * predictions from a standard forward and backward bigram model.
  */
 
 public class BidirectionalBigramModel extends BigramModel
@@ -51,44 +49,14 @@ public class BidirectionalBigramModel extends BigramModel
 		Double totalLogProb   = 0.0;
 		Double totalNumTokens = 0.0;
 		for (List<String> sentence : sentences) {
-		    totalNumTokens += sentence.size() + 1; // Yes end-of-sentence.
 		    List<Double> forwardProbs  = new LinkedList<Double>(Arrays.asList(forwardModel.sentenceTokenProbs(sentence)));
 		    List<Double> backwardProbs = new LinkedList<Double>(Arrays.asList(backwardModel.sentenceTokenProbs(sentence)));
-		  
-		    // Rearrange for interpolation.
-		    rearrangeBackwardProbabilities(backwardProbs);
 		    
 		    assert(forwardProbs.size() == backwardProbs.size());
 		    assert(forwardProbs.size() == sentence.size() + 1);
 		    
-		    for(int i = 0; i < forwardProbs.size(); i++)
-		    {
-		    	totalLogProb += Math.log(interpolate(forwardProbs.get(i), backwardProbs.get(i)));
-		    }
-		}
-		double perplexity = Math.exp(-totalLogProb / totalNumTokens);
-		System.out.println("Perplexity = " + perplexity );
-	}
-	
-	@Override
-	public void test2(List<List<String>> sentences)
-	{
-		Double totalLogProb   = 0.0;
-		Double totalNumTokens = 0.0;
-		for (List<String> sentence : sentences) {
-		    totalNumTokens += sentence.size(); // No end-of-sentence.
-		    List<Double> forwardProbs  = new LinkedList<Double>(Arrays.asList(forwardModel.sentenceTokenProbs(sentence)));
-		    List<Double> backwardProbs = new LinkedList<Double>(Arrays.asList(backwardModel.sentenceTokenProbs(sentence)));
-		    
-		    // Rearrange for interpolation.
-		    rearrangeBackwardProbabilities(backwardProbs);
-		    
-		    assert(forwardProbs.size() == backwardProbs.size());
-		    assert(forwardProbs.size() == sentence.size() + 1);
-		    
-		    // For word perplexity, we ignore end-of-sentence probabilities.
-		    forwardProbs.remove(forwardProbs.size() - 1);
-		    backwardProbs.remove(backwardProbs.size() - 1);
+		    // Include End-of-Sentence.
+		    totalNumTokens += sentence.size() + 1;
 		    
 		    for(int i = 0; i < forwardProbs.size() && i < backwardProbs.size(); i++)
 		    {
@@ -99,22 +67,30 @@ public class BidirectionalBigramModel extends BigramModel
 		System.out.println("Word Perplexity = " + perplexity );
 	}
 	
-	/*
-	 * Rearranges the backward probabilities of a sentence for easy
-	 * traversal and interpolation with forward counterparts.
-	 */
-	private void rearrangeBackwardProbabilities(List<Double> backwardProbs)
+	@Override
+	public void test2(List<List<String>> sentences)
 	{
-	    // Observe that </S> will be out-of-place after a simple reverse.
-	    //             Original: This is a sentence </S>
-	    //             Reversed: sentence a is This </S>
-	    //    Reversed Reversed: </S> This is a sentence
-	    //                         |-----------------|
-	    //         What We Want: This is a sentence </S>
-	    Double tail = backwardProbs.get(backwardProbs.size() - 1);
-	    backwardProbs.remove(backwardProbs.size() - 1);
-	    Collections.reverse(backwardProbs);
-	    backwardProbs.add(tail);
+		Double totalLogProb   = 0.0;
+		Double totalNumTokens = 0.0;
+		for (List<String> sentence : sentences) {
+		    List<Double> forwardProbs  = new LinkedList<Double>(Arrays.asList(forwardModel.sentenceTokenProbs(sentence)));
+		    List<Double> backwardProbs = new LinkedList<Double>(Arrays.asList(backwardModel.sentenceTokenProbs(sentence)));
+		    
+		    assert(forwardProbs.size() == backwardProbs.size());
+		    assert(forwardProbs.size() == sentence.size() + 1);
+		    
+		    // Don't include End-of-Sentence.
+		    totalNumTokens += sentence.size();
+		    forwardProbs.remove(forwardProbs.size() - 1);
+		    backwardProbs.remove(backwardProbs.size() - 1);
+		    
+		    for(int i = 0; i < forwardProbs.size() && i < backwardProbs.size(); i++)
+		    {
+		    	totalLogProb += Math.log(interpolate(forwardProbs.get(i), backwardProbs.get(i)));
+		    }
+		}
+		double perplexity = Math.exp(-totalLogProb / totalNumTokens);
+		System.out.println("Word Perplexity = " + perplexity );
 	}
 	
 	private double interpolate(double forwardProbability, double backwardProbability)

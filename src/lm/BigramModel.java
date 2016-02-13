@@ -349,29 +349,29 @@ public class BigramModel {
 			   ") \n# Test Sentences = " + testSentences.size() +
 			   " (# words = " + wordCount(testSentences) + ")");
 	// Create a bigram model and train it.
-	System.out.println("----- Bigram Model ----- ");
-	BigramModel model = new BigramModel();
-	System.out.println("Training...");
-	model.train(trainSentences);
-	// Test on training data using test and test2
-	model.test(trainSentences);
-	model.test2(trainSentences);
-	System.out.println("Testing...");
-    // Test on test data using test and test2
-	model.test(testSentences);
-	model.test2(testSentences);
-	
-	System.out.println("----- Backward Bigram Model ----- ");
-	BigramModel model2 = new BackwardBigramModel();
-	System.out.println("Training...");
-	model2.train(trainSentences);
-	// Test on training data using test and test2
-	model2.test(trainSentences);
-	model2.test2(trainSentences);
-	System.out.println("Testing...");
-	// Test on test data using test and test2
-	model2.test(testSentences);
-	model2.test2(testSentences);
+//	System.out.println("----- Bigram Model ----- ");
+//	BigramModel model = new BigramModel();
+//	System.out.println("Training...");
+//	model.train(trainSentences);
+//	// Test on training data using test and test2
+//	model.test(trainSentences);
+//	model.test2(trainSentences);
+//	System.out.println("Testing...");
+//    // Test on test data using test and test2
+//	model.test(testSentences);
+//	model.test2(testSentences);
+//	
+//	System.out.println("----- Backward Bigram Model ----- ");
+//	BigramModel model2 = new BackwardBigramModel();
+//	System.out.println("Training...");
+//	model2.train(trainSentences);
+//	// Test on training data using test and test2
+//	model2.test(trainSentences);
+//	model2.test2(trainSentences);
+//	System.out.println("Testing...");
+//	// Test on test data using test and test2
+//	model2.test(testSentences);
+//	model2.test2(testSentences);
 
 //	List<String> testSentence = new ArrayList<String>();
 //	testSentence.add("This");
@@ -381,17 +381,34 @@ public class BigramModel {
 //	testSentences = new ArrayList<List<String>>();
 //	testSentences.add(testSentence);
 
-	System.out.println("----- Bidirectional Bigram Model ----- ");
-	BigramModel model3 = new BidirectionalBigramModel();
-	System.out.println("Training...");
-	model3.train(trainSentences);
-	// Test on training data using test and test2
-	model3.test(trainSentences);
-	model3.test2(trainSentences);
-	System.out.println("Testing...");
-	// Test on test data using test and test2
-	model3.test(testSentences);
-	model3.test2(testSentences);
+
+	for(int i = 0; i < 100; i++)
+	{
+		double w = i * 0.01;
+		BigramModel model = new BidirectionalBigramModel(w, 1 - w);
+		model.train(trainSentences);
+		model.test(trainSentences);
+	}
+	System.out.println();
+	for(int i = 0; i < 100; i++)
+	{
+		double w = i * 0.01;
+		BigramModel model = new BidirectionalBigramModel(w, 1 - w);
+		model.train(trainSentences);
+		model.test(testSentences);
+	}
+	
+//	System.out.println("----- Bidirectional Bigram Model ----- ");
+//	BigramModel model3 = new BidirectionalBigramModel();
+//	System.out.println("Training...");
+//	model3.train(trainSentences);
+//	// Test on training data using test and test2
+//	model3.test(trainSentences);
+//	model3.test2(trainSentences);
+//	System.out.println("Testing...");
+//	// Test on test data using test and test2
+//	model3.test(testSentences);
+//	model3.test2(testSentences);
     }
 
 }
