@@ -48,7 +48,8 @@ public class BidirectionalBigramModel extends BigramModel
 	{
 		Double totalLogProb   = 0.0;
 		Double totalNumTokens = 0.0;
-		for (List<String> sentence : sentences) {
+		for (List<String> sentence : sentences) 
+		{
 		    List<Double> forwardProbs  = new LinkedList<Double>(Arrays.asList(forwardModel.sentenceTokenProbs(sentence)));
 		    List<Double> backwardProbs = new LinkedList<Double>(Arrays.asList(backwardModel.sentenceTokenProbs(sentence)));
 		    
@@ -72,7 +73,8 @@ public class BidirectionalBigramModel extends BigramModel
 	{
 		Double totalLogProb   = 0.0;
 		Double totalNumTokens = 0.0;
-		for (List<String> sentence : sentences) {
+		for (List<String> sentence : sentences) 
+		{
 		    List<Double> forwardProbs  = new LinkedList<Double>(Arrays.asList(forwardModel.sentenceTokenProbs(sentence)));
 		    List<Double> backwardProbs = new LinkedList<Double>(Arrays.asList(backwardModel.sentenceTokenProbs(sentence)));
 		    
