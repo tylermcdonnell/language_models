@@ -1,0 +1,33 @@
+java lm.BidirectionalBigramModel /PATH/pos/atis 0.1
+
+# Train Sentences = 519 (# words = 3922) 
+# Test Sentences = 58 (# words = 431)
+Training...
+Word Perplexity = 6.079038849784845
+Word Perplexity = 7.235173934081928
+Testing...
+Word Perplexity = 10.227400707195182
+Word Perplexity = 12.700210156018782
+
+java lm.BidirectionalBigramModel /PATH/pos/wsj 0.1
+
+# Train Sentences = 43820 (# words = 995626) 
+# Test Sentences = 4869 (# words = 111718)
+Training...
+Word Perplexity = 40.203944451801
+Word Perplexity = 46.514445090625685
+Testing...
+Word Perplexity = 104.79584550158708
+Word Perplexity = 126.11315738801784
+
+java lm.BidirectionalBigramModel /PATH/pos/brown 0.1
+
+# Train Sentences = 47207 (# words = 1079440) 
+# Test Sentences = 5245 (# words = 93530)
+Training...
+Word Perplexity = 52.374978247024046
+Word Perplexity = 61.46886647117787
+Testing...
+Word Perplexity = 130.1573828031508
+Word Perplexity = 167.48711091426273
+
